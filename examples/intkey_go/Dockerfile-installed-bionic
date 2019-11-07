@@ -42,7 +42,7 @@ RUN echo "deb [arch=amd64] http://repo.sawtooth.me/ubuntu/ci bionic universe" >>
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
-ENV GOPATH=/go:/go/src/github.com/hyperledger/sawtooth-sdk-go/:/go/src/github.com/hyperledger/sawtooth-sdk-go/examples/intkey_go
+ENV GOPATH=/go:/go/src/github.com/hyperledger/sawtooth-sdk-go/:/go/src/github.com/hyperledger/sawtooth-sdk-go/examples/intkey_go:/go/src/github.com/hyperledger/sawtooth-sdk-go/protobuf
 
 ENV PATH=$PATH:/project/bin:/go/bin:/usr/lib/go-1.11/bin
 
@@ -64,11 +64,11 @@ RUN go get -u \
     gopkg.in/yaml.v2
 
 COPY . /go/src/github.com/hyperledger/sawtooth-sdk-go
+COPY ./protobuf /go/src/github.com/hyperledger/sawtooth-sdk-go/src/protobuf
 
 WORKDIR /go/src/github.com/hyperledger/sawtooth-sdk-go
 
-RUN go generate \
- && cd examples/intkey_go \
+RUN cd examples/intkey_go \
  && if [ -d "bin" ]; then rm -rf bin; fi \
  && mkdir bin \
  && cd src/sawtooth_intkey \
